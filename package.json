@@ -1,0 +1,20 @@
+{
+  "name": "modularload",
+  "version": "1.0.0",
+  "description": "Dead simple page transitions and lazy loading.",
+  "repository": "modularorg/modularload",
+  "author": "Antoine Boulanger <hello@antoineboulanger.com> (https://antoineboulanger.com)",
+  "license": "MIT",
+  "main": "dist/main.cjs.js",
+  "module": "dist/main.esm.js",
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
+    "rollup": "^1.4.0",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-node-resolve": "^4.0.1"
+  }
+}
