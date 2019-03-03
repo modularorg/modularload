@@ -39,10 +39,10 @@ import modularLoad from 'modularload';
 this.load = new modularLoad({
     enterDelay: 300,
     transitions: {
-        article: {
+        transitionName: {
             enterDelay: 450
         },
-        contact: {
+        transitionTwoName: {
             enterDelay: 600
         }
     }
@@ -52,11 +52,11 @@ this.load = new modularLoad({
 <html data-page="home">
    <body> 
         <nav>
-            <a href="/contact" data-load="contact">Contact</a>
+            <a href="/contact" data-load="transitionName">Contact</a>
         </nav>
         <div data-load-container>
             <h1>Hello</h1>
-            <a href="/blog" data-load="article">Read more</a>
+            <a href="/blog" data-load="transitionTwoName">Read more</a>
         </div>
    </body>
 </html> 
@@ -89,7 +89,7 @@ this.load = new modularLoad();
 this.load.on('loaded', (transition, oldContainer, newContainer) => {
     console.log('👌');
 
-    if (transition == 'contact') {
+    if (transition == 'transitionName') {
         console.log('🤙');
     }
 });
