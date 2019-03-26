@@ -2,7 +2,6 @@ export default class {
     constructor(options) {
         this.defaults = {
             name: 'load',
-            page: 'page',
             loadingClass: 'is-loading',
             loadedClass: 'is-loaded',
             readyClass: 'is-ready',
@@ -167,13 +166,17 @@ export default class {
     }
 
     setAttributes(data) {
-        const title = data.getElementsByTagName('title')[0].innerHTML;
-        const description = data.head.querySelector('meta[name="description"]').getAttribute('content');
-        const page = data.querySelector('html').getAttribute('data-' + this.page);
+        const title = data.getElementsByTagName('title')[0];
+        const description = data.head.querySelector('meta[name="description"]');
+        const datas = Object.assign({}, data.querySelector('html').dataset);
 
-        document.title = title;
-        document.head.querySelector('meta[name="description"]').setAttribute('content', description);
-        document.querySelector('html').setAttribute('data-' + this.page, page);
+        if (title) document.title = title.innerHTML;
+        if (description) document.head.querySelector('meta[name="description"]').setAttribute('content', description.getAttribute('content'));
+        if (datas) {
+            Object.entries(datas).forEach(([key, val]) => {
+                document.querySelector('html').setAttribute('data-' + key, val);
+            });
+        }
     }
 
     hideContainer() {

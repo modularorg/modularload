@@ -99,7 +99,6 @@ this.load.on('loaded', (transition, oldContainer, newContainer) => {
 | Option | Type | Default | Description |
 | ------ | ---- | ------- | ----------- |
 | `name` | `string` | `'load'` | Data attributes name |
-| `page` | `string` | `'page'` | Page data attribute name |
 | `loadingClass` | `string` | `'is-loading'` | Class when a link is clicked |
 | `loadedClass` | `string` | `'is-loaded'` | Class when the new container enters |
 | `readyClass` | `string` | `'is-ready'` | Class when the old container exits |
@@ -117,7 +116,6 @@ this.load.on('loaded', (transition, oldContainer, newContainer) => {
 | `data-load-srcset` | `string` | Lazy load srcset attribute |
 | `data-load-style` | `string` | Lazy load style attribute |
 | `data-load-href` | `string` | Lazy load href attribute |
-| `data-page` | `string` | Page name on html element |
 
 ## Events
 | Event | Arguments | Description |
