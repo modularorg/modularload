@@ -54,7 +54,7 @@ export default class {
     }
 
     reset() {
-        this.html.classList.remove(this.loadedClass);
+        this.html.classList.remove(this.loadedClass, this.readyClass);
         this.isEntered = false;
         this.isLoaded = false;
 
@@ -141,7 +141,7 @@ export default class {
 
                 this.hideContainer();
 
-                this.parentContainer.insertBefore(this.newContainer, this.oldContainer.nextSibling);
+                this.parentContainer.insertBefore(this.newContainer, this.oldContainer);
 
                 this.setSvgs();
                 this.setAttributes(data);
