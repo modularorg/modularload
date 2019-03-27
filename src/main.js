@@ -20,6 +20,8 @@ export default class {
         this.isLoaded = false;
         this.isEntered = false;
 
+        this.isChrome = (navigator.userAgent.indexOf("Chrome") != -1) ? true : false;
+
         this.init();
     }
 
@@ -141,6 +143,7 @@ export default class {
 
                 this.parentContainer.insertBefore(this.newContainer, this.oldContainer.nextSibling);
 
+                this.setSvgs();
                 this.setAttributes(data);
 
                 if (this.isEntered) {
@@ -163,6 +166,24 @@ export default class {
             this.removeContainer();
             this.setReady();
         }, exitDelay);
+    }
+
+    setSvgs() {
+        if (this.isChrome) {
+            const svgs = this.newContainer.querySelectorAll('use');
+
+            if (svgs.length) {
+                svgs.forEach((svg) => {
+                    const xhref = svg.getAttribute('xlink:href');
+                    if (xhref) {
+                        svg.setAttribute('xlink:href', xhref);
+                    } else {
+                        const href = svg.getAttribute('href');
+                        if (href) svg.setAttribute('href', href);
+                    }
+                });
+            }
+        }
     }
 
     setAttributes(data) {
