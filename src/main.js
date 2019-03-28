@@ -93,8 +93,8 @@ export default class {
         let exitDelay = this.exitDelay;
 
         if (this.transition && this.transition != 'true') {
-            enterDelay = this.transitions[this.transition].enterDelay;
-            exitDelay = this.transitions[this.transition].exitDelay;
+            enterDelay = this.transitions[this.transition].enterDelay || this.enterDelay;
+            exitDelay = this.transitions[this.transition].exitDelay || this.exitDelay;
         }
 
         this.oldContainer = document.querySelector(this.container);
