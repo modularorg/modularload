@@ -7,18 +7,20 @@ export default class {
             readyClass: 'is-ready',
             transitionsPrefix: 'is-',
             enterDelay: 0,
-            exitDelay: 0
+            exitDelay: 0,
+            isLoaded: false,
+            isEntered: false
         }
 
         Object.assign(this, this.defaults, options);
 
+        this.options = options;
         this.namespace = 'modular';
         this.html = document.documentElement;
-        this.container = '[data-' + this.name + '-container]';
+        this.container = 'data-' + this.name + '-container';
         this.loadAttributes = ['src', 'srcset', 'style', 'href'];
 
-        this.isLoaded = false;
-        this.isEntered = false;
+        this.classContainer = this.html;
 
         this.isChrome = (navigator.userAgent.indexOf("Chrome") != -1) ? true : false;
 
@@ -54,13 +56,14 @@ export default class {
     }
 
     reset() {
-        this.html.classList.remove(this.loadedClass, this.readyClass);
-        this.isEntered = false;
-        this.isLoaded = false;
+        this.classContainer.classList.remove(this.loadedClass, this.readyClass);
 
         if (this.transition) {
-            this.html.classList.remove(this.transitionsPrefix + this.transition);
+            this.classContainer.classList.remove(this.transitionsPrefix + this.transition);
         }
+
+        this.classContainer = this.html;
+        Object.assign(this, this.defaults, this.options);
     }
 
     getClickOptions(link) {
@@ -89,44 +92,59 @@ export default class {
     }
 
     setOptions(href, push) {
-        let enterDelay = this.enterDelay;
-        let exitDelay = this.exitDelay;
+        let container = '[' + this.container + ']';
+        let transitionContainer;
+        let oldContainer;
 
         if (this.transition && this.transition != 'true') {
-            enterDelay = this.transitions[this.transition].enterDelay || this.enterDelay;
-            exitDelay = this.transitions[this.transition].exitDelay || this.exitDelay;
+            transitionContainer = '[' + this.container + '="' + this.transition + '"]';
+            this.loadingClass = this.transitions[this.transition].loadingClass || this.loadingClass;
+            this.loadedClass = this.transitions[this.transition].loadedClass || this.loadedClass;
+            this.readyClass = this.transitions[this.transition].readyClass || this.readyClass;
+            this.transitionsPrefix= this.transitions[this.transition].transitionsPrefix || this.transitionsPrefix;
+            this.enterDelay = this.transitions[this.transition].enterDelay || this.enterDelay;
+            this.exitDelay = this.transitions[this.transition].exitDelay || this.exitDelay;
+
+            oldContainer = document.querySelector(transitionContainer);
         }
 
-        this.oldContainer = document.querySelector(this.container);
+        if (oldContainer) {
+            container = transitionContainer;
+            this.oldContainer = oldContainer;
+            this.classContainer = this.oldContainer.parentNode;
+        } else {
+            this.oldContainer = document.querySelector(container);
+        }
+
         this.oldContainer.classList.add('is-old');
 
         this.setLoading();
-        this.startEnterDelay(enterDelay, exitDelay);
-        this.goTo(href, exitDelay, push);
+        this.startEnterDelay();
+        this.goTo(href, container, push);
     }
 
     setLoading() {
-        this.html.classList.add(this.loadingClass);
+        this.classContainer.classList.add(this.loadingClass);
 
         if (this.transition) {
-            this.html.classList.add(this.transitionsPrefix + this.transition);
+            this.classContainer.classList.add(this.transitionsPrefix + this.transition);
         }
 
         const loadingEvent = new Event(this.namespace + 'loading');
         window.dispatchEvent(loadingEvent);
     }
 
-    startEnterDelay(enterDelay, exitDelay) {
+    startEnterDelay() {
         setTimeout(() => {
             this.isEntered = true;
 
             if (this.isLoaded) {
-                this.transitionContainers(exitDelay);
+                this.transitionContainers();
             }
-        }, enterDelay);
+        }, this.enterDelay);
     }
 
-    goTo(href, exitDelay, push) {
+    goTo(href, container, push) {
         fetch(href)
             .then(response => response.text())
             .then(data => {
@@ -136,7 +154,7 @@ export default class {
                 const parser = new DOMParser();
                 data = parser.parseFromString(data, 'text/html');
 
-                this.newContainer = data.querySelector(this.container);
+                this.newContainer = data.querySelector(container);
                 this.newContainer.classList.add('is-new');
 
                 this.hideContainer();
@@ -147,7 +165,7 @@ export default class {
                 this.setAttributes(data);
 
                 if (this.isEntered) {
-                    this.transitionContainers(exitDelay);
+                    this.transitionContainers();
                 }
 
                 this.loadEls(this.newContainer);
@@ -158,14 +176,14 @@ export default class {
         }
     }
 
-    transitionContainers(exitDelay) {
+    transitionContainers() {
         this.showContainer();
         this.setLoaded();
 
         setTimeout(() => {
             this.removeContainer();
             this.setReady();
-        }, exitDelay);
+        }, this.exitDelay);
     }
 
     setSvgs() {
@@ -241,8 +259,8 @@ export default class {
     }
 
     setLoaded() {
-        this.html.classList.add(this.loadedClass);
-        this.html.classList.remove(this.loadingClass);
+        this.classContainer.classList.add(this.loadedClass);
+        this.classContainer.classList.remove(this.loadingClass);
 
         const loadedEvent = new Event(this.namespace + 'loaded');
         window.dispatchEvent(loadedEvent);
@@ -254,7 +272,7 @@ export default class {
     }
 
     setReady() {
-        this.html.classList.add(this.readyClass);
+        this.classContainer.classList.add(this.readyClass);
 
         const readyEvent = new Event(this.namespace + 'ready');
         window.dispatchEvent(readyEvent);
