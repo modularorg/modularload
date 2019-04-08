@@ -212,10 +212,10 @@ export default class {
                 svgs.forEach((svg) => {
                     const xhref = svg.getAttribute('xlink:href');
                     if (xhref) {
-                        svg.setAttribute('xlink:href', xhref);
+                        svg.parentNode.innerHTML = '<use xlink:href="' + xhref + '"></use>';
                     } else {
                         const href = svg.getAttribute('href');
-                        if (href) svg.setAttribute('href', href);
+                        if (href) svg.parentNode.innerHTML = '<use href="' + href + '"></use>';
                     }
                 });
             }

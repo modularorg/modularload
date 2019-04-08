@@ -1,6 +1,6 @@
 {
   "name": "modularload",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Dead simple page transitions and lazy loading.",
   "repository": "modularorg/modularload",
   "author": "Antoine Boulanger <hello@antoineboulanger.com> (https://antoineboulanger.com)",
