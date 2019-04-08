@@ -17,7 +17,10 @@ export default class {
         this.options = options;
         this.namespace = 'modular';
         this.html = document.documentElement;
+        this.href = window.location.href;
         this.container = 'data-' + this.name + '-container';
+        this.subContainer = false;
+        this.prevTransition = null;
         this.loadAttributes = ['src', 'srcset', 'style', 'href'];
 
         this.classContainer = this.html;
@@ -86,8 +89,8 @@ export default class {
 
     getStateOptions() {
         this.transition = history.state;
-        const href = window.location.href;
 
+        const href = window.location.href;
         this.setOptions(href);
     }
 
@@ -112,9 +115,24 @@ export default class {
             container = transitionContainer;
             this.oldContainer = oldContainer;
             this.classContainer = this.oldContainer.parentNode;
+
+            if (!this.subContainer) {
+                history.replaceState(this.transition, null, this.href);
+            }
+
+            this.subContainer = true;
         } else {
+            this.prevTransition = this.transition;
             this.oldContainer = document.querySelector(container);
+
+            if (this.subContainer) {
+                history.replaceState(this.prevTransition, null, this.href);
+            }
+
+            this.subContainer = false;
         }
+
+        this.href = href;
 
         this.oldContainer.classList.add('is-old');
 
