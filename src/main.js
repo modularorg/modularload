@@ -59,12 +59,6 @@ export default class {
     }
 
     reset() {
-        this.classContainer.classList.remove(this.loadedClass, this.readyClass);
-
-        if (this.transition) {
-            this.classContainer.classList.remove(this.transitionsPrefix + this.transition);
-        }
-
         this.classContainer = this.html;
         Object.assign(this, this.defaults, this.options);
     }
@@ -142,11 +136,15 @@ export default class {
     }
 
     setLoading() {
+        this.classContainer.classList.remove(this.loadedClass, this.readyClass);
         this.classContainer.classList.add(this.loadingClass);
 
         if (this.transition) {
+            this.classContainer.classList.remove(this.transitionsPrefix + this.prevTransition);
             this.classContainer.classList.add(this.transitionsPrefix + this.transition);
         }
+
+        this.prevTransition = this.transition;
 
         const loadingEvent = new Event(this.namespace + 'loading');
         window.dispatchEvent(loadingEvent);
