@@ -32,7 +32,7 @@ this.load = new modularLoad({
 </div>
 ```
 
-#### With transitions
+#### With custom transitions
 ```js
 import modularLoad from 'modularload';
 
@@ -60,6 +60,30 @@ this.load = new modularLoad({
         </div>
    </body>
 </html> 
+```
+
+#### With custom container
+```js
+import modularLoad from 'modularload';
+
+this.load = new modularLoad({
+    enterDelay: 600,
+    transitions: {
+        article: {
+            enterDelay: 300
+        }
+    }
+});
+```
+```html
+<div data-load-container>
+    <div data-load-container="article">
+        <h1>Article One</h1>
+        <p>Text</p>  
+    </div>
+    <a href="/blog/article-one" data-load="article">Article One</a> 
+    <a href="/blog/article-two" data-load="article">Article Two</a> 
+</div>
 ```
 
 #### With lazy images
@@ -110,7 +134,7 @@ this.load.on('loaded', (transition, oldContainer, newContainer) => {
 ## Attributes
 | Attribute | Values | Description |
 | --------- | ------ | ----------- |
-| `data-load-container` |  | Container you want to load |
+| `data-load-container` | ` `, `string` | Container you want to load with optional string |
 | `data-load` | `string`, `false` | Transition name or disable transition |
 | `data-load-src` | `string` | Lazy load src attribute |
 | `data-load-srcset` | `string` | Lazy load srcset attribute |
