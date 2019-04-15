@@ -116,7 +116,6 @@ export default class {
 
             this.subContainer = true;
         } else {
-            this.prevTransition = this.transition;
             this.oldContainer = document.querySelector(container);
 
             if (this.subContainer) {
@@ -139,12 +138,14 @@ export default class {
         this.classContainer.classList.remove(this.loadedClass, this.readyClass);
         this.classContainer.classList.add(this.loadingClass);
 
+        this.classContainer.classList.remove(this.transitionsPrefix + this.prevTransition);
         if (this.transition) {
-            this.classContainer.classList.remove(this.transitionsPrefix + this.prevTransition);
             this.classContainer.classList.add(this.transitionsPrefix + this.transition);
         }
 
-        this.prevTransition = this.transition;
+        if (!this.subContainer) {
+            this.prevTransition = this.transition;
+        }
 
         const loadingEvent = new Event(this.namespace + 'loading');
         window.dispatchEvent(loadingEvent);
