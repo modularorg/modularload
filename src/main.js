@@ -169,9 +169,9 @@ export default class {
                 this.parentContainer = this.oldContainer.parentNode;
 
                 const parser = new DOMParser();
-                data = parser.parseFromString(data, 'text/html');
+                this.data = parser.parseFromString(data, 'text/html');
 
-                this.newContainer = data.querySelector(container);
+                this.newContainer = this.data.querySelector(container);
                 this.newContainer.classList.add('is-new');
 
                 this.hideContainer();
@@ -179,7 +179,6 @@ export default class {
                 this.parentContainer.insertBefore(this.newContainer, this.oldContainer);
 
                 this.setSvgs();
-                this.setAttributes(data);
 
                 if (this.isEntered) {
                     this.transitionContainers();
@@ -194,6 +193,7 @@ export default class {
     }
 
     transitionContainers() {
+        this.setAttributes();
         this.showContainer();
         this.setLoaded();
 
@@ -221,10 +221,10 @@ export default class {
         }
     }
 
-    setAttributes(data) {
-        const title = data.getElementsByTagName('title')[0];
-        const description = data.head.querySelector('meta[name="description"]');
-        const datas = Object.assign({}, data.querySelector('html').dataset);
+    setAttributes() {
+        const title = this.data.getElementsByTagName('title')[0];
+        const description = this.data.head.querySelector('meta[name="description"]');
+        const datas = Object.assign({}, this.data.querySelector('html').dataset);
 
         if (title) document.title = title.innerHTML;
         if (description) document.head.querySelector('meta[name="description"]').setAttribute('content', description.getAttribute('content'));
@@ -242,9 +242,9 @@ export default class {
     }
 
     showContainer() {
-        this.newContainer.style.visibility = 'visible';
-        this.newContainer.style.height = 'auto';
-        this.newContainer.style.overflow = 'auto';
+        this.newContainer.style.visibility = '';
+        this.newContainer.style.height = '';
+        this.newContainer.style.overflow = '';
     }
 
     loadEls(container) {
@@ -276,8 +276,8 @@ export default class {
     }
 
     setLoaded() {
-        this.classContainer.classList.add(this.loadedClass);
         this.classContainer.classList.remove(this.loadingClass);
+        this.classContainer.classList.add(this.loadedClass);
 
         const loadedEvent = new Event(this.namespace + 'loaded');
         window.dispatchEvent(loadedEvent);
