@@ -31,8 +31,8 @@ export default class {
     }
 
     init() {
-        window.addEventListener('click', (e) => this.checkClick(e), false);
         window.addEventListener('popstate', (e) => this.checkState(e), false);
+        this.html.addEventListener('click', (e) => this.checkClick(e), false);
 
         this.loadEls(document);
     }
