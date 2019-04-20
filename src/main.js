@@ -232,9 +232,13 @@ export default class {
         if (description) document.head.querySelector('meta[name="description"]').setAttribute('content', description.getAttribute('content'));
         if (datas) {
             Object.entries(datas).forEach(([key, val]) => {
-                document.querySelector('html').setAttribute('data-' + key, val);
+                document.querySelector('html').setAttribute('data-' + this.toDash(key), val);
             });
         }
+    }
+
+    toDash(str) {
+        return str.split(/(?=[A-Z])/).join('-').toLowerCase();
     }
 
     hideContainer() {
