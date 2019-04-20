@@ -38,19 +38,21 @@ export default class {
     }
 
     checkClick(e) {
-        e.preventDefault();
+        if (!e.ctrlKey && !e.metaKey) {
+            e.preventDefault();
 
-        let target = e.target;
+            let target = e.target;
 
-        while (target && target !== document) {
-            if (target.matches('a')) {
-                this.reset();
-                this.getClickOptions(target);
-                break;
-            }
+            while (target && target !== document) {
+                if (target.matches('a')) {
+                    this.reset();
+                    this.getClickOptions(target);
+                    break;
+                }
 
-            target = target.parentNode;
-        };
+                target = target.parentNode;
+            };
+        }
     }
 
     checkState() {
