@@ -39,12 +39,12 @@ export default class {
 
     checkClick(e) {
         if (!e.ctrlKey && !e.metaKey) {
-            e.preventDefault();
-
             let target = e.target;
 
             while (target && target !== document) {
                 if (target.matches('a')) {
+                    e.preventDefault();
+
                     this.reset();
                     this.getClickOptions(target);
                     break;
