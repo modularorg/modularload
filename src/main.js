@@ -75,8 +75,12 @@ export default class {
             return;
         }
 
-        if (this.transition == 'false' || href.startsWith('#')) {
+        if (this.transition == 'false') {
             window.location = href;
+            return;
+        }
+
+        if (href.startsWith('#')) {
             return;
         }
 
