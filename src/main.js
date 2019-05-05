@@ -9,7 +9,9 @@ export default class {
             enterDelay: 0,
             exitDelay: 0,
             isLoaded: false,
-            isEntered: false
+            isEntered: false,
+            isUrl: false,
+            transitionContainer: null
         }
 
         Object.assign(this, this.defaults, options);
@@ -22,6 +24,10 @@ export default class {
         this.subContainer = false;
         this.prevTransition = null;
         this.loadAttributes = ['src', 'srcset', 'style', 'href'];
+        this.isInserted = false;
+        this.controller = new AbortController();
+        this.signal = this.controller.signal;
+        this.enterTimeout = false;
 
         this.classContainer = this.html;
 
@@ -61,12 +67,20 @@ export default class {
     }
 
     reset() {
+        this.controller.abort();
+        window.clearTimeout(this.enterTimeout);
+
+        if (this.isInserted) {
+            this.removeContainer();
+        }
+
         this.classContainer = this.html;
         Object.assign(this, this.defaults, this.options);
     }
 
     getClickOptions(link) {
         this.transition = link.getAttribute('data-' + this.name);
+        this.isUrl = link.getAttribute('data-' + this.name + '-url');
         const href = link.getAttribute('href');
         const target = link.getAttribute('target');
 
@@ -96,23 +110,22 @@ export default class {
 
     setOptions(href, push) {
         let container = '[' + this.container + ']';
-        let transitionContainer;
         let oldContainer;
 
         if (this.transition && this.transition != 'true') {
-            transitionContainer = '[' + this.container + '="' + this.transition + '"]';
+            this.transitionContainer = '[' + this.container + '="' + this.transition + '"]';
             this.loadingClass = this.transitions[this.transition].loadingClass || this.loadingClass;
             this.loadedClass = this.transitions[this.transition].loadedClass || this.loadedClass;
             this.readyClass = this.transitions[this.transition].readyClass || this.readyClass;
-            this.transitionsPrefix= this.transitions[this.transition].transitionsPrefix || this.transitionsPrefix;
+            this.transitionsPrefix = this.transitions[this.transition].transitionsPrefix || this.transitionsPrefix;
             this.enterDelay = this.transitions[this.transition].enterDelay || this.enterDelay;
             this.exitDelay = this.transitions[this.transition].exitDelay || this.exitDelay;
 
-            oldContainer = document.querySelector(transitionContainer);
+            oldContainer = document.querySelector(this.transitionContainer);
         }
 
         if (oldContainer) {
-            container = transitionContainer;
+            container = this.transitionContainer;
             this.oldContainer = oldContainer;
             this.classContainer = this.oldContainer.parentNode;
 
@@ -132,12 +145,17 @@ export default class {
         }
 
         this.href = href;
+        this.parentContainer = this.oldContainer.parentNode;
 
-        this.oldContainer.classList.add('is-old');
+        if (this.isUrl != null && this.isUrl != 'false') {
+            history.pushState(this.transition, null, href);
+        } else {
+            this.oldContainer.classList.add('is-old');
 
-        this.setLoading();
-        this.startEnterDelay();
-        this.goTo(href, container, push);
+            this.setLoading();
+            this.startEnterDelay();
+            this.goTo(href, container, push);
+        }
     }
 
     setLoading() {
@@ -158,7 +176,7 @@ export default class {
     }
 
     startEnterDelay() {
-        setTimeout(() => {
+        this.enterTimeout = window.setTimeout(() => {
             this.isEntered = true;
 
             if (this.isLoaded) {
@@ -168,23 +186,26 @@ export default class {
     }
 
     goTo(href, container, push) {
-        fetch(href)
+        fetch(href, {
+                signal: this.signal
+            })
             .then(response => response.text())
             .then(data => {
-                this.isLoaded = true;
-                this.parentContainer = this.oldContainer.parentNode;
-
                 const parser = new DOMParser();
                 this.data = parser.parseFromString(data, 'text/html');
 
                 this.newContainer = this.data.querySelector(container);
                 this.newContainer.classList.add('is-new');
+                this.parentNewContainer = this.newContainer.parentNode;
 
                 this.hideContainer();
 
                 this.parentContainer.insertBefore(this.newContainer, this.oldContainer);
+                this.isInserted = true;
 
                 this.setSvgs();
+
+                this.isLoaded = true;
 
                 if (this.isEntered) {
                     this.transitionContainers();
@@ -230,13 +251,24 @@ export default class {
     setAttributes() {
         const title = this.data.getElementsByTagName('title')[0];
         const description = this.data.head.querySelector('meta[name="description"]');
-        const datas = Object.assign({}, this.data.querySelector('html').dataset);
+        let container;
+        let newContainer;
+
+        if (this.subContainer) {
+            newContainer = this.parentNewContainer;
+            container = document.querySelector(this.transitionContainer).parentNode;
+        } else {
+            newContainer = this.data.querySelector('html');
+            container = document.querySelector('html');
+        }
+
+        const datas = Object.assign({}, newContainer.dataset);
 
         if (title) document.title = title.innerHTML;
         if (description) document.head.querySelector('meta[name="description"]').setAttribute('content', description.getAttribute('content'));
         if (datas) {
             Object.entries(datas).forEach(([key, val]) => {
-                document.querySelector('html').setAttribute('data-' + this.toDash(key), val);
+                container.setAttribute('data-' + this.toDash(key), val);
             });
         }
     }
@@ -296,6 +328,7 @@ export default class {
     removeContainer() {
         this.parentContainer.removeChild(this.oldContainer);
         this.newContainer.classList.remove('is-new');
+        this.isInserted = false;
     }
 
     setReady() {

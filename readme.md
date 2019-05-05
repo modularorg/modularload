@@ -136,6 +136,7 @@ this.load.on('loaded', (transition, oldContainer, newContainer) => {
 | --------- | ------ | ----------- |
 | `data-load-container` | ` `, `string` | Container you want to load with optional string |
 | `data-load` | `string`, `false` | Transition name or disable transition |
+| `data-load-url` | `boolean` | Update url without loading container |
 | `data-load-src` | `string` | Lazy load src attribute |
 | `data-load-srcset` | `string` | Lazy load srcset attribute |
 | `data-load-style` | `string` | Lazy load style attribute |
