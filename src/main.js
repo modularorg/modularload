@@ -25,9 +25,9 @@ export default class {
         this.prevTransition = null;
         this.loadAttributes = ['src', 'srcset', 'style', 'href'];
         this.isInserted = false;
-        this.controller = new AbortController();
-        this.signal = this.controller.signal;
+        this.isLoading = false;
         this.enterTimeout = false;
+        this.controller = new AbortController();
 
         this.classContainer = this.html;
 
@@ -67,7 +67,12 @@ export default class {
     }
 
     reset() {
-        this.controller.abort();
+        if (this.isLoading) {
+            this.controller.abort();
+            this.isLoading = false;
+            this.controller = new AbortController();
+        }
+
         window.clearTimeout(this.enterTimeout);
 
         if (this.isInserted) {
@@ -147,7 +152,7 @@ export default class {
         this.href = href;
         this.parentContainer = this.oldContainer.parentNode;
 
-        if (this.isUrl != null && this.isUrl != 'false') {
+        if (this.isUrl != null && this.isUrl != 'false' && this.isUrl != false) {
             history.pushState(this.transition, null, href);
         } else {
             this.oldContainer.classList.add('is-old');
@@ -186,9 +191,10 @@ export default class {
     }
 
     goTo(href, container, push) {
-        fetch(href, {
-                signal: this.signal
-            })
+        this.isLoading = true;
+        const signal = this.controller.signal;
+
+        fetch(href, {signal})
             .then(response => response.text())
             .then(data => {
                 const parser = new DOMParser();
@@ -212,6 +218,10 @@ export default class {
                 }
 
                 this.loadEls(this.newContainer);
+                this.isLoading = false;
+            })
+            .catch(err => {
+
             })
 
         if (push) {
