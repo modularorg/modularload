@@ -152,7 +152,7 @@ export default class {
         this.href = href;
         this.parentContainer = this.oldContainer.parentNode;
 
-        if (this.isUrl != null && this.isUrl != 'false' && this.isUrl != false) {
+        if (this.isUrl === '' || this.isUrl != null && this.isUrl != 'false' && this.isUrl != false) {
             history.pushState(this.transition, null, href);
         } else {
             this.oldContainer.classList.add('is-old');
