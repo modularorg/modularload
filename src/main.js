@@ -8,6 +8,7 @@ export default class {
             transitionsPrefix: 'is-',
             enterDelay: 0,
             exitDelay: 0,
+            loadedDelay: 0,
             isLoaded: false,
             isEntered: false,
             isUrl: false,
@@ -125,6 +126,7 @@ export default class {
             this.transitionsPrefix = this.transitions[this.transition].transitionsPrefix || this.transitionsPrefix;
             this.enterDelay = this.transitions[this.transition].enterDelay || this.enterDelay;
             this.exitDelay = this.transitions[this.transition].exitDelay || this.exitDelay;
+            this.loadedDelay = this.transitions[this.transition].loadedDelay || this.loadedDelay;
 
             oldContainer = document.querySelector(this.transitionContainer);
         }
@@ -221,7 +223,7 @@ export default class {
                 this.isLoading = false;
             })
             .catch(err => {
-
+                console.log(err);
             })
 
         if (push) {
@@ -329,7 +331,10 @@ export default class {
 
     setLoaded() {
         this.classContainer.classList.remove(this.loadingClass);
-        this.classContainer.classList.add(this.loadedClass);
+
+        setTimeout(() => {
+            this.classContainer.classList.add(this.loadedClass);
+        }, this.loadedDelay);
 
         const loadedEvent = new Event(this.namespace + 'loaded');
         window.dispatchEvent(loadedEvent);

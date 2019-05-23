@@ -123,29 +123,30 @@ this.load.on('loaded', (transition, oldContainer, newContainer) => {
 | Option | Type | Default | Description |
 | ------ | ---- | ------- | ----------- |
 | `name` | `string` | `'load'` | Data attributes name |
-| `loadingClass` | `string` | `'is-loading'` | Class when a link is clicked |
-| `loadedClass` | `string` | `'is-loaded'` | Class when the new container enters |
-| `readyClass` | `string` | `'is-ready'` | Class when the old container exits |
-| `transitionsPrefix` | `string` | `'is-'` | Custom transitions class prefix |
-| `enterDelay` | `number` | `0` | Minimum delay before the new container enters |
-| `exitDelay` | `number` | `0` | Delay before the old container exists after the new enters |
-| `transitions` | `object` | `{}` | Custom transitions options |
+| `loadingClass` | `string` | `'is-loading'` | Class when a link is clicked. |
+| `loadedClass` | `string` | `'is-loaded'` | Class when the new container enters. |
+| `readyClass` | `string` | `'is-ready'` | Class when the old container exits. |
+| `transitionsPrefix` | `string` | `'is-'` | Custom transitions class prefix. |
+| `enterDelay` | `number` | `0` | Minimum delay before the new container enters. |
+| `exitDelay` | `number` | `0` | Delay before the old container exists after the new enters. |
+| `loadedDelay` | `number` | `0` | Delay before adding the loaded class. For example, to wait for your JS DOM updates. |
+| `transitions` | `object` | `{}` | Custom transitions options. |
 
 ## Attributes
 | Attribute | Values | Description |
 | --------- | ------ | ----------- |
-| `data-load-container` | ` `, `string` | Container you want to load with optional string |
-| `data-load` | `string`, `false` | Transition name or disable transition |
-| `data-load-url` | `boolean` | Update url without loading container |
-| `data-load-src` | `string` | Lazy load src attribute |
-| `data-load-srcset` | `string` | Lazy load srcset attribute |
-| `data-load-style` | `string` | Lazy load style attribute |
-| `data-load-href` | `string` | Lazy load href attribute |
+| `data-load-container` | ` `, `string` | Container you want to load with optional string. |
+| `data-load` | `string`, `false` | Transition name or disable transition. |
+| `data-load-url` | `boolean` | Update url without loading container. |
+| `data-load-src` | `string` | Lazy load src attribute. |
+| `data-load-srcset` | `string` | Lazy load srcset attribute. |
+| `data-load-style` | `string` | Lazy load style attribute. |
+| `data-load-href` | `string` | Lazy load href attribute. |
 
 ## Events
 | Event | Arguments | Description |
 | ----- | --------- | ----------- |
-| `loading` | `transition`, `oldContainer` | On link click |
-| `loaded` | `transition`, `oldContainer`, `newContainer` | On new container enter |
-| `ready` | `transition`, `newContainer` | On old container exit |
-| `images` | | On all images load |
+| `loading` | `transition`, `oldContainer` | On link click. |
+| `loaded` | `transition`, `oldContainer`, `newContainer` | On new container enter. |
+| `ready` | `transition`, `newContainer` | On old container exit. |
+| `images` | | On all images load. |
