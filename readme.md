@@ -119,6 +119,15 @@ this.load.on('loaded', (transition, oldContainer, newContainer) => {
 });
 ```
 
+#### With methods
+```js
+import modularLoad from 'modularload';
+
+this.load = new modularLoad();
+
+this.load.goTo('/page', 'transitionName');
+```
+
 ## Options
 | Option | Type | Default | Description |
 | ------ | ---- | ------- | ----------- |
@@ -150,3 +159,8 @@ this.load.on('loaded', (transition, oldContainer, newContainer) => {
 | `loaded` | `transition`, `oldContainer`, `newContainer` | On new container enter. |
 | `ready` | `transition`, `newContainer` | On old container exit. |
 | `images` | | On all images load. |
+
+## Methods
+| Method | Description |
+| ------ | ----------- |
+| `goTo('href'[, 'transition'][, true])` | Go to href. With optional transition name and boolean for url update only. |

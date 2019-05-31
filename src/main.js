@@ -114,6 +114,14 @@ export default class {
         this.setOptions(href);
     }
 
+    goTo(href, transition, isUrl) {
+        this.reset();
+        this.transition = transition;
+        this.isUrl = isUrl;
+
+        this.setOptions(href, true);
+    }
+
     setOptions(href, push) {
         let container = '[' + this.container + ']';
         let oldContainer;
@@ -161,7 +169,7 @@ export default class {
 
             this.setLoading();
             this.startEnterDelay();
-            this.goTo(href, container, push);
+            this.loadHref(href, container, push);
         }
     }
 
@@ -192,7 +200,7 @@ export default class {
         }, this.enterDelay);
     }
 
-    goTo(href, container, push) {
+    loadHref(href, container, push) {
         this.isLoading = true;
         const signal = this.controller.signal;
 
