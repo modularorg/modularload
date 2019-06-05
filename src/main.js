@@ -270,7 +270,8 @@ export default class {
 
     setAttributes() {
         const title = this.data.getElementsByTagName('title')[0];
-        const description = this.data.head.querySelector('meta[name="description"]');
+        const newDesc = this.data.head.querySelector('meta[name="description"]');
+        const oldDesc = document.head.querySelector('meta[name="description"]');
         let container;
         let newContainer;
 
@@ -285,7 +286,7 @@ export default class {
         const datas = Object.assign({}, newContainer.dataset);
 
         if (title) document.title = title.innerHTML;
-        if (description) document.head.querySelector('meta[name="description"]').setAttribute('content', description.getAttribute('content'));
+        if (oldDesc && newDesc) oldDesc.setAttribute('content', newDesc.getAttribute('content'));
         if (datas) {
             Object.entries(datas).forEach(([key, val]) => {
                 container.setAttribute('data-' + this.toDash(key), val);
