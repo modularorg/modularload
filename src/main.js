@@ -50,10 +50,15 @@ export default class {
 
             while (target && target !== document) {
                 if (target.matches('a')) {
-                    e.preventDefault();
+                    const href = target.getAttribute('href');
 
-                    this.reset();
-                    this.getClickOptions(target);
+                    if (!href.startsWith('#') && !href.startsWith('mailto:') && !href.startsWith('tel:')) {
+                        e.preventDefault();
+
+                        this.reset();
+                        this.getClickOptions(target);
+                    }
+
                     break;
                 }
 
@@ -97,10 +102,6 @@ export default class {
 
         if (this.transition == 'false') {
             window.location = href;
-            return;
-        }
-
-        if (href.startsWith('#')) {
             return;
         }
 
