@@ -49,7 +49,7 @@ export default class {
             let target = e.target;
 
             while (target && target !== document) {
-                if (target.matches('a')) {
+                if (target.matches('a') && target.getAttribute('download') == null) {
                     const href = target.getAttribute('href');
 
                     if (!href.startsWith('#') && !href.startsWith('mailto:') && !href.startsWith('tel:')) {
