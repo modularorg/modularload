@@ -136,6 +136,7 @@ this.load.goTo('/page', 'transitionName');
 | `loadedClass` | `string` | `'is-loaded'` | Class when the new container enters. |
 | `readyClass` | `string` | `'is-ready'` | Class when the old container exits. |
 | `transitionsPrefix` | `string` | `'is-'` | Custom transitions class prefix. |
+| `transitionsHistory` | `boolean` | `true` | Redo the custom transitions while using the back button. |
 | `enterDelay` | `number` | `0` | Minimum delay before the new container enters. |
 | `exitDelay` | `number` | `0` | Delay before the old container exists after the new enters. |
 | `loadedDelay` | `number` | `0` | Delay before adding the loaded class. For example, to wait for your JS DOM updates. |

@@ -6,6 +6,7 @@ export default class {
             loadedClass: 'is-loaded',
             readyClass: 'is-ready',
             transitionsPrefix: 'is-',
+            transitionsHistory: true,
             enterDelay: 0,
             exitDelay: 0,
             loadedDelay: 0,
@@ -109,7 +110,11 @@ export default class {
     }
 
     getStateOptions() {
-        this.transition = history.state;
+        if (this.transitionsHistory) {
+            this.transition = history.state;
+        } else {
+            this.transition = false;
+        }
 
         const href = window.location.href;
         this.setOptions(href);
