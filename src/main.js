@@ -213,6 +213,10 @@ export default class {
         fetch(href, {signal})
             .then(response => response.text())
             .then(data => {
+                if (push) {
+                    history.pushState(this.transition, null, href);
+                }
+
                 const parser = new DOMParser();
                 this.data = parser.parseFromString(data, 'text/html');
 
@@ -237,12 +241,8 @@ export default class {
                 this.isLoading = false;
             })
             .catch(err => {
-                console.log(err);
+                window.location = href;
             })
-
-        if (push) {
-            history.pushState(this.transition, null, href);
-        }
     }
 
     transitionContainers() {
