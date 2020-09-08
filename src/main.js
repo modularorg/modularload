@@ -291,7 +291,7 @@ export default class {
 
         const datas = Object.assign({}, newContainer.dataset);
 
-        if (title) document.title = title.innerHTML;
+        if (title) document.title = title.innerText;
         if (oldDesc && newDesc) oldDesc.setAttribute('content', newDesc.getAttribute('content'));
         if (datas) {
             Object.entries(datas).forEach(([key, val]) => {
