@@ -13,7 +13,8 @@ export default class {
             isLoaded: false,
             isEntered: false,
             isUrl: false,
-            transitionContainer: null
+            transitionContainer: null,
+            popstateIgnore: false
         }
 
         Object.assign(this, this.defaults, options);
@@ -69,6 +70,10 @@ export default class {
     }
 
     checkState() {
+        if((typeof this.popstateIgnore === 'string') && window.location.href.indexOf(this.popstateIgnore) > -1) {
+            return
+        }
+
         this.reset();
         this.getStateOptions();
     }
