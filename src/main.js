@@ -23,6 +23,7 @@ export default class {
         this.html = document.documentElement;
         this.href = window.location.href;
         this.container = 'data-' + this.name + '-container';
+        this.exclude = 'data-' + this.name + '-exclude';
         this.subContainer = false;
         this.prevTransition = null;
         this.loadAttributes = ['src', 'srcset', 'style', 'href'];
@@ -50,6 +51,9 @@ export default class {
             let target = e.target;
 
             while (target && target !== document) {
+                if (target.matches('a') && target.hasAttribute(this.exclude)) {
+                    return;
+                }
                 if (target.matches('a') && target.getAttribute('download') == null) {
                     const href = target.getAttribute('href');
 
